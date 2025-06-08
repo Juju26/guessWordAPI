@@ -5,7 +5,9 @@ WORKDIR /app
 
 # Copy pom.xml and dependencies
 COPY pom.xml .
-RUN mvn dependency:go-offline
+
+# Try resolving dependencies (retry if failed)
+RUN for i in 1 2 3; do mvn dependency:go-offline -B -U && break || sleep 5; done
 
 # Copy the rest of the source
 COPY src ./src
@@ -20,6 +22,9 @@ WORKDIR /app
 
 # Copy the JAR from the builder stage
 COPY --from=builder /app/target/*.jar app.jar
+COPY wait-for-it.sh .
+
+RUN chmod +x wait-for-it.sh
 
 # Run the app
 ENTRYPOINT ["java", "-jar", "app.jar"]

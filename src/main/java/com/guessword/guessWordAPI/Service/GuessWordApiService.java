@@ -1,8 +1,11 @@
 package com.guessword.guessWordAPI.Service;
 
 import com.guessword.guessWordAPI.Model.GuessWordApi;
+import com.guessword.guessWordAPI.Model.Word;
+import com.guessword.guessWordAPI.Repository.GuessWordApiRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -10,12 +13,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class GuessWordApiService {
+
+    @Autowired
+    private GuessWordApiRepository guessWordApiRepository;
+
     private static final Logger log = LoggerFactory.getLogger(GuessWordApiService.class);
-//    move to DB
-    private static final List<String> WORDS = Arrays.asList(
-            "abide", "abied", "adieu", "adive", "aided", "audio",
-            "wired", "wised", "wited", "wived", "wried", "yield", "yiped", "zeoid"
-    );
 
     public Map<String, Object> process(GuessWordApi data){
         List<String> matches=new ArrayList<>();
@@ -46,8 +48,11 @@ public class GuessWordApiService {
         }
 
 //        [TODO] not the best way to loop all the words and check if its the given word to be fixed
-       for(String sampleWord:WORDS){
-           final String word=sampleWord.toLowerCase();
+       List<Word> candidateWords= guessWordApiRepository.findAllValidFiveLetterWords();
+
+        for(Word wordObj:candidateWords){
+
+           final String word=wordObj.getText();
 
            // 1. Skip if it contains any letter that should not be present (gray)
            if (notIn.stream().anyMatch(word::contains)) continue;
