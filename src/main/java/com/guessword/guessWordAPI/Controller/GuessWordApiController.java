@@ -21,6 +21,11 @@ public class GuessWordApiController {
     private String testController(){
         return "Working";
     }
+
+    @GetMapping("/words")
+    private String knownWords(){
+        return "Will be implemented soon";
+    }
     @PostMapping("/process")
     private Map<String,Object> processGuessWord(@RequestBody GuessWordApi request){
         log.info("Contoller invoked");
