@@ -24,7 +24,7 @@ public class GuessWordApiController {
 
     @GetMapping("/words")
     private String knownWords(){
-        return "Will be implemented soon";
+        return "Will be implemented sooner!";
     }
     @PostMapping("/process")
     private Map<String,Object> processGuessWord(@RequestBody GuessWordApi request){
