@@ -1,0 +1,30 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Pull latest Docker image
+      run: sudo docker pull --quiet whalejuju/guesswordapi-app:latest
+
+    - name: Stop and remove old container
+      run: |
+        if sudo docker ps -a --format '{{.Names}}' | grep -Eq "^guesswordapi-app-container$"; then
+          sudo docker stop guesswordapi-app-container
+          sudo docker rm guesswordapi-app-container
+        fi
+
+    - name: Run new Docker container
+      run: |
+        sudo docker run -d \
+          --restart unless-stopped \
+          -p 8080:8080 \
+          --name guesswordapi-app-container \
+          whalejuju/guesswordapi-app:latest
