@@ -17,7 +17,8 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-RUN yum update -y && yum install -y nc
+# Install netcat for wait-for-it.sh
+RUN apt-get update && apt-get install -y netcat && rm -rf /var/lib/apt/lists/*
 
 # Copy the JAR from the builder stage
 COPY --from=builder /app/target/*.jar app.jar
