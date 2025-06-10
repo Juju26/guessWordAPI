@@ -2,33 +2,39 @@ version: "3.8"
 
 services:
 
-  db:
+  mysql-db:
     image: mysql:8.0
     container_name: mysql-db
-    restart: unless-stopped
+#    restart: unless-stopped
 #    ports:
 #      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASS}
       MYSQL_DATABASE: ${DB_NAME}
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ./mysql-init:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  app:
+  guessword-api:
     build: .
     container_name: wordle-api
     ports:
       - "8080:8080"
     depends_on:
-      - db
+       mysql-db:
+         condition: service_healthy
     environment:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
-    entrypoint: ["./wait-for-it.sh", "db", "--", "java", "-jar", "app.jar"]
+#    entrypoint: ["./wait-for-it.sh", "db", "--", "java", "-jar", "app.jar"]
+      command: sh -c "./wait-for-it.sh mysql-db:3306 -- java -jar app.jar"
 
 volumes:
   mysql_data:
