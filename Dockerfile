@@ -17,10 +17,12 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
+RUN yum update -y && yum install -y nc
+
 # Copy the JAR from the builder stage
 COPY --from=builder /app/target/*.jar app.jar
 COPY wait-for-it.sh .
 
 RUN chmod +x wait-for-it.sh
 
-ENTRYPOINT ./wait-for-it.sh mysql:3306 -- java -jar app.jar
+ENTRYPOINT ["./wait-for-it.sh", "mysql:3306", "--", "java", "-jar", "app.jar"]
