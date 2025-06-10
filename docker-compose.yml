@@ -34,7 +34,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
 #    entrypoint: ["./wait-for-it.sh", "db", "--", "java", "-jar", "app.jar"]
-      command: sh -c "./wait-for-it.sh mysql-db:3306 -- java -jar app.jar"
+#      command: sh -c "./wait-for-it.sh mysql-db:3306 -- java -jar app.jar"
 
 volumes:
   mysql_data:
