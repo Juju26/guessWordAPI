@@ -2,9 +2,9 @@ version: "3.8"
 
 services:
 
-  mysql-db:
+  mysql:
     image: mysql:8.0
-    container_name: mysql-db
+    container_name: mysql
 #    restart: unless-stopped
 #    ports:
 #      - "3306:3306"
@@ -25,7 +25,7 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-       mysql-db:
+       mysql:
          condition: service_healthy
     environment:
       DB_HOST: ${DB_HOST}
