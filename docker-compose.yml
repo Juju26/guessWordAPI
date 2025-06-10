@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
 
   mysql:
@@ -9,8 +7,8 @@ services:
 #    ports:
 #      - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASS}
-      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: Mysql@01
+      MYSQL_DATABASE: guessword
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
@@ -28,13 +26,13 @@ services:
        mysql:
          condition: service_healthy
     environment:
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: guessword
+      DB_USER: root
+      DB_PASS: Mysql@01
 #    entrypoint: ["./wait-for-it.sh", "db", "--", "java", "-jar", "app.jar"]
 #      command: sh -c "./wait-for-it.sh mysql-db:3306 -- java -jar app.jar"
 
 volumes:
-  mysql_data:
+  db_data:
