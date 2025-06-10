@@ -4,8 +4,8 @@ services:
     image: mysql:8.0
     container_name: mysql
 #    restart: unless-stopped
-#    ports:
-#      - "3306:3306"
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: Mysql@01
       MYSQL_DATABASE: guessword
@@ -26,13 +26,8 @@ services:
        mysql:
          condition: service_healthy
     environment:
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_NAME: guessword
-      DB_USER: root
-      DB_PASS: Mysql@01
-#    entrypoint: ["./wait-for-it.sh", "db", "--", "java", "-jar", "app.jar"]
-#      command: sh -c "./wait-for-it.sh mysql-db:3306 -- java -jar app.jar"
-
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/guessword
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Mysql@01
 volumes:
   db_data:
