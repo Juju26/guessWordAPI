@@ -19,7 +19,7 @@ public class GuessWordApiController {
 
     @GetMapping("/test")
     private String testController(){
-        return "Working";
+        return "Finally Working huh ";
     }
 
     @GetMapping("/words")
