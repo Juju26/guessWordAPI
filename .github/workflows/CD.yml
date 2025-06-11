@@ -15,14 +15,12 @@ jobs:
       run: sudo docker pull --quiet whalejuju/guesswordapi-app:latest
 
    # Trying compose commands 
-    - name: Navigate to docker-compose directory
-      run: cd /home/ec2-user/guessWordAPI
-
-    - name: Shut down old containers and volumes
-      run: sudo docker-compose down -v
-
-    - name: Start updated containers
-      run: sudo docker-compose up -d --remove-orphans
+    - name: Deploy with Compose
+      run: |
+        cd /home/ec2-user/guessWordAPI
+        docker-compose pull
+        docker-compose down -v
+        docker-compose up -d --remove-orphans
     # old working way
     # - name: Stop and remove old container
     #   run: |
