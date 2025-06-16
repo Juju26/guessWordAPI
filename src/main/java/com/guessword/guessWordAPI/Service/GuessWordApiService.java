@@ -19,6 +19,14 @@ public class GuessWordApiService {
 
     private static final Logger log = LoggerFactory.getLogger(GuessWordApiService.class);
 
+    public List<Word> savedWords(){
+        List<Word> candidateWords= guessWordApiRepository.findAllValidFiveLetterWords();
+        if(!candidateWords.isEmpty()){
+            return candidateWords;
+        }
+        return  null;
+    }
+
     public Map<String, Object> process(GuessWordApi data){
         List<String> matches=new ArrayList<>();
 
